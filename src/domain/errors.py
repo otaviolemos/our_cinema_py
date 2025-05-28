@@ -1,0 +1,2 @@
+class DuplicateRoomName(Exception):
+    pass

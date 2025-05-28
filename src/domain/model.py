@@ -33,6 +33,8 @@ class Seat:
         self.status = SeatStatus.AVAILABLE
 
     
+ASCII_CODE_FOR_A = 65
+
 @dataclass
 class Room:
     name: str
@@ -44,15 +46,15 @@ class Room:
         if seats is None:
             self.create_list_of_seats()
             return
-        i = 65
+        row_code = ASCII_CODE_FOR_A
         for row in seats:
             row_seats = []
-            row_name = chr(i)
+            row_name = chr(row_code)
             for j in range(row):
                 seat = Seat(row=row_name, number=j+1)
                 row_seats.append(seat)
             self.rows.append(row_seats)
-            i += 1
+            row_code += 1
 
     def create_list_of_seats(self):
         for i in range(10):
@@ -83,7 +85,7 @@ class Theater:
 
     def add(self, room):
         if self.duplicate_room_name(room):
-            raise DuplicateRoomName()
+            raise DuplicateRoomName
         self.rooms.append(room)
 
     def remove(self, room):

@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from enum import Enum
 from src.domain.errors import DuplicateRoomName
+from datetime import datetime, timedelta
 
 class SeatStatus(Enum):
     AVAILABLE = "available"
@@ -93,3 +94,31 @@ class Theater:
 
     def duplicate_room_name(self, room):
         return [theater_room for theater_room in self.rooms if theater_room.name == room.name]
+    
+@dataclass
+class Movie:
+    title: str
+    genre: str
+    duration: int
+
+    def formatted_duration(self):
+        hours = self.duration // 60
+        minutes = self.duration % 60
+        if minutes > 0 and hours > 0:
+            return f"{hours}h{minutes}min"
+        elif hours > 0:
+            return f"{hours}h"
+        else:
+            return f"{minutes}min"
+        
+    def get_duration_as_timedelta(self):
+        return timedelta(minutes=self.duration)
+        
+@dataclass
+class Session:
+    room: Room
+    movie: Movie
+    start_time: datetime
+
+    def end_time(self):
+        return self.start_time + self.movie.get_duration_as_timedelta()

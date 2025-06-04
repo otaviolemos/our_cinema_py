@@ -22,7 +22,6 @@ X Each theater room has unique name
 
 ## Movie Tests
 Create movie
-Movie has unique ID
 Get formatted duration (90 minutes movie -> 1h30min)
 Get duration as timedelta (converts movie length in minutes to a timedelta object for time calculations)
 
@@ -30,7 +29,6 @@ Get duration as timedelta (converts movie length in minutes to a timedelta objec
 1. Create session
 2. Session has unique ID
 3. Calculate end time
-4. Check if seat is available
 5. Get all available seats
 6. Detect session overlap same room
 7. No overlap different rooms

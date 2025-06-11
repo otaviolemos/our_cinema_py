@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from enum import Enum
-from src.domain.errors import DuplicateRoomName, OverlappingSessionsOnSameRoom
+from src.domain.errors import DuplicateRoomName, OverlappingSessionsOnSameRoom, SeatAlreadyReservedError, SeatDoesNotExistInSessionError
 from datetime import datetime, timedelta
 
 class SeatStatus(Enum):
@@ -90,6 +90,34 @@ class SessionRoom:
                     available_seats += 1
         return available_seats
     
+    def reserve_seat(self, seat: str):
+        indices = convert_seat_notation_to_indices(seat)
+
+        if indices[0] >= len(self.rows) or indices[1] >= len(self.rows[indices[0]]):
+            raise SeatDoesNotExistInSessionError
+
+        return self.rows[indices[0]][indices[1]].reserve()
+    
+def convert_seat_notation_to_indices(seat_notation: str) -> tuple[int, int]:
+    row_letter = seat_notation[0].upper()
+    seat_number_str = seat_notation[1:]
+
+    if not row_letter.isalpha():
+        raise ValueError(f"Row must be a letter, got '{row_letter}'")
+
+    try:
+        seat_number = int(seat_number_str)
+        if seat_number < 0:
+            raise ValueError(f"Seat number must be positive.")
+    except ValueError:
+        raise ValueError(f"Invalid seat number: '{seat_number_str}'")
+
+    row_index = ord(row_letter) - ord('A')
+    column_index = seat_number - 1
+    
+    return (row_index, column_index)
+
+    
 @dataclass
 class Movie:
     title: str
@@ -157,3 +185,45 @@ class Theater:
 
     def duplicate_room_name(self, room):
         return [theater_room for theater_room in self.rooms if theater_room.name == room.name]
+    
+class PriceType(Enum):
+    SENIOR = "senior"
+    REGULAR = "regular"
+    STUDENT_HALF = "student_half"
+
+@dataclass
+class Reservation:
+    seat: tuple[int, int]
+    session: Session
+    price_type: PriceType
+
+    def __init__(self, seat: str, session: Session, price_type: PriceType):
+        self.seat = seat
+        self.session = session
+        self.price_type = price_type
+
+        if not self.session.sessionRoom.reserve_seat(seat):
+            raise SeatAlreadyReservedError
+        
+@dataclass
+class PriceTable:
+    price_table: dict
+
+    def getPrice(self, price_type):
+        return self.price_table[price_type]
+
+@dataclass
+class User:
+    username: str
+
+@dataclass
+class ShoppingCart:
+    user: User
+    reservations: list[Reservation]
+    price_table: PriceTable
+
+    def total_price(self):
+        total = 0.0
+        for reservation in self.reservations:
+            total += self.price_table.getPrice(reservation.price_type)
+        return total

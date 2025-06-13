@@ -1,4 +1,4 @@
-from src.domain.model import Movie
+from domain.movie import Movie
 
 class MovieBuilder:
     movie: Movie

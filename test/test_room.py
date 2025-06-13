@@ -1,4 +1,5 @@
-from src.domain.model import Room, SessionRoom
+from domain.room import Room
+from domain.session_room import SessionRoom
 
 def test_create_session_room():
     room = Room("1")

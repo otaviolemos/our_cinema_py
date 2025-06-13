@@ -1,4 +1,4 @@
-from src.domain.model import Movie
+from domain.movie import Movie
 from test.builder.movie_builder import MovieBuilder
 
 def test_get_formatted_duration_with_hours_and_minutes():

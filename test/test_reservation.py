@@ -1,6 +1,10 @@
 from datetime import datetime, timedelta
-from src.domain.model import PriceType, Reservation, Room, Session, convert_seat_notation_to_indices
-from src.domain.errors import SeatAlreadyReservedError, SeatDoesNotExistInSessionError
+from domain.room import Room
+from domain.price_type import PriceType
+from domain.reservation import Reservation
+from domain.session import Session
+from domain.errors import SeatAlreadyReservedError, SeatDoesNotExistInSessionError
+from domain.utils import convert_seat_notation_to_indices
 from test.builder.movie_builder import MovieBuilder
 import pytest
 

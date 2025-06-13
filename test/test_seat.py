@@ -1,4 +1,4 @@
-from src.domain.model import Seat, SeatStatus
+from domain.seat import Seat, SeatStatus
 
 def test_create_seat_with_row_and_number():
     seat = Seat(row='A', number=1)

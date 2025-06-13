@@ -1,8 +1,7 @@
 from test.builder.movie_builder import MovieBuilder
-from src.domain.model import Room, Session, Theater
-from src.domain.errors import OverlappingSessionsOnSameRoom
+from domain.room import Room
+from domain.session import Session
 from datetime import datetime, timedelta
-import pytest
 
 def test_calculate_session_end_time():
     room = Room("1")

@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta
-from src.domain.model import Room, Session, Theater
-from src.domain.errors import DuplicateRoomName, OverlappingSessionsOnSameRoom
+from domain.room import Room
+from domain.session import Session
+from domain.theater import Theater
+from domain.errors import DuplicateRoomName, OverlappingSessionsOnSameRoom
 import pytest
 from test.builder.movie_builder import MovieBuilder
 

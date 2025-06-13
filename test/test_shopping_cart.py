@@ -1,6 +1,12 @@
 
 from datetime import datetime, timedelta
-from src.domain.model import PriceTable, PriceType, Reservation, Room, Session, ShoppingCart, User
+from domain.price_table import PriceTable
+from domain.price_type import PriceType
+from domain.reservation import Reservation
+from domain.room import Room
+from domain.session import Session
+from domain.shopping_cart import ShoppingCart
+from domain.user import User
 from test.builder.movie_builder import MovieBuilder
 
 

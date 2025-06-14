@@ -2,19 +2,25 @@ from dataclasses import dataclass
 from domain.errors import SeatAlreadyReservedError
 from domain.price_type import PriceType
 from domain.session import Session
+from domain.user import User
 
 
 @dataclass
 class Reservation:
-    seat: tuple[int, int]
+    seats: list[tuple[int, int]]
     session: Session
-    price_type: PriceType
+    user: User
+    price_types: list[PriceType]
 
-    def __init__(self, seat: str, session: Session, price_type: PriceType):
-        self.seat = seat
+    def __init__(self, seats: list[str], session: Session, user: User):
+        self.seats = seats
         self.session = session
-        self.price_type = price_type
+        self.price_type = []
+        self.user = user
 
-        if not self.session.sessionRoom.reserve_seat(
-seat):
-            raise SeatAlreadyReservedError
+        for seat in seats:
+            if not self.session.sessionRoom.is_available(seat):
+                raise SeatAlreadyReservedError
+            
+        for seat in seats:
+            self.session.sessionRoom.reserve_seat(seat)

@@ -13,7 +13,7 @@ class Seat:
     status: SeatStatus = SeatStatus.AVAILABLE
 
     @property
-    def is_available(self):
+    def available(self):
         return self.status == SeatStatus.AVAILABLE
     
     def reserve(self):

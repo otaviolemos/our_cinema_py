@@ -39,7 +39,7 @@ class SessionRoom:
         available_seats = 0
         for row in self.rows:
             for seat in row:
-                if seat.is_available:
+                if seat.available:
                     available_seats += 1
         return available_seats
     
@@ -50,3 +50,11 @@ class SessionRoom:
             raise SeatDoesNotExistInSessionError
 
         return self.rows[indices[0]][indices[1]].reserve()
+    
+    def is_available(self, seat: str):
+        indices = convert_seat_notation_to_indices(seat)
+
+        if indices[0] >= len(self.rows) or indices[1] >= len(self.rows[indices[0]]):
+            raise SeatDoesNotExistInSessionError
+
+        return self.rows[indices[0]][indices[1]].available

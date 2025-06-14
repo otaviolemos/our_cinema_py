@@ -4,12 +4,12 @@ def test_create_seat_with_row_and_number():
     seat = Seat(row='A', number=1)
     assert seat.row == 'A'
     assert seat.number == 1
-    assert seat.is_available is True
+    assert seat.available is True
 
 def test_reserve_seat():
     seat = Seat(row='A', number=1)
     assert seat.reserve() is True
-    assert seat.is_available is False
+    assert seat.available is False
 
 def test_cannot_reserve_reserved_seat():
     seat = Seat(row='A', number=1)
@@ -20,13 +20,13 @@ def test_confirm_reserved_seat():
     seat = Seat(row='A', number=1)
     seat.reserve()
     assert seat.confirm() is True
-    assert seat.is_available is False
+    assert seat.available is False
     assert seat.status == SeatStatus.OCCUPIED
 
 def test_cannot_confirm_available_seat():
     seat = Seat(row='A', number=1)
     assert seat.confirm() is False
-    assert seat.is_available
+    assert seat.available
 
 def test_cannot_confirm_occupied_seat():
     seat = Seat(row='A', number=1)
@@ -44,4 +44,4 @@ def test_release_seat():
     seat = Seat(row='A', number=1)
     seat.reserve()
     seat.release()
-    assert seat.is_available
+    assert seat.available

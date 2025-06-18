@@ -1,4 +1,6 @@
 from dataclasses import dataclass
+from typing import Optional
+from uuid import UUID
 from domain.errors import SeatAlreadyReservedError
 from domain.price_type import PriceType
 from domain.session import Session
@@ -11,6 +13,7 @@ class Reservation:
     session: Session
     user: User
     price_types: list[PriceType]
+    id: Optional[UUID] = None
 
     def __init__(self, seats: list[str], session: Session, user: User):
         self.seats = seats

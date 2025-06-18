@@ -1,0 +1,6 @@
+from typing import Protocol
+
+
+class KeyValueRepository(Protocol):
+    def get(self, key: str) -> str | None: ...
+    def set(self, key: str, value: str, ex: int | None = None) -> bool: ...

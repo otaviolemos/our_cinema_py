@@ -1,5 +1,7 @@
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Optional
+from uuid import UUID
 
 class SeatStatus(Enum):
     AVAILABLE = "available"
@@ -11,6 +13,7 @@ class Seat:
     row: str
     number: int
     status: SeatStatus = SeatStatus.AVAILABLE
+    id: Optional[UUID] = None
 
     @property
     def available(self):

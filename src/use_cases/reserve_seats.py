@@ -1,3 +1,4 @@
+from domain.errors import SeatAlreadyReservedError
 from domain.reservation import Reservation
 
 
@@ -22,6 +23,8 @@ class ReserveSeats:
         self.reservation_repository.save(reservation)
 
         for seat in seats:
-            self.key_value_repository.set(f"{seat}-{session.id}", reservation.id)
+            result = self.key_value_repository.set(f"{seat}-{session.id}", reservation.id)
+            if not result:
+                raise SeatAlreadyReservedError()
 
         return reservation

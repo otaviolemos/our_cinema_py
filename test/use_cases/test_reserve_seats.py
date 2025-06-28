@@ -8,6 +8,7 @@ from test.doubles.fake_key_value_repository import FakeKeyValueRepository
 from test.doubles.fake_reservation_repository import FakeReservationRepository
 from test.doubles.fake_session_repository import FakeSessionRepository
 from test.doubles.fake_user_repository import FakeUserRepository
+from test.doubles.key_value_repository_stub_for_racing_condition import KeyValueRepositoryStubForRacingCondition
 from use_cases.reserve_seats import ReserveSeats
 import pytest
 
@@ -70,3 +71,27 @@ def test_reserve_temporarily_unavaiable_seats():
         useCase.perform(['A1'], session_id, user_id)
 
     assert keyValueRepository.get(f"A1-{session_id}") is not None
+
+def test_racing_condition_on_temporary_reservation():
+    today = datetime.now()
+    tomorrow = today + timedelta(days=1)
+    tomorrow_at_seven_pm = tomorrow.replace(hour=19, minute=0, second=0, microsecond=0)
+
+    registeredUser = User("test_user")
+    registeredRoom = Room("1")
+    registeredMovie = MovieBuilder().aMovie().build()
+    registeredSession = Session(registeredRoom, registeredMovie, tomorrow_at_seven_pm)
+    
+    emptyReservationRepo = FakeReservationRepository()
+    singleUserUserRepository = FakeUserRepository()
+    singleSessionSessionRepository = FakeSessionRepository()
+
+    session_id = singleSessionSessionRepository.save(registeredSession)
+    user_id = singleUserUserRepository.save(registeredUser)
+
+    keyValueRepository = KeyValueRepositoryStubForRacingCondition()
+
+    useCase = ReserveSeats(emptyReservationRepo, singleUserUserRepository, singleSessionSessionRepository, keyValueRepository)
+
+    with pytest.raises(SeatAlreadyReservedError):
+        useCase.perform(['A1'], session_id, user_id)

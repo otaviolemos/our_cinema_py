@@ -58,3 +58,45 @@ class SessionRoom:
             raise SeatDoesNotExistInSessionError
 
         return self.rows[indices[0]][indices[1]].available
+
+    def ascLayout(self):
+        layout = "\n"
+
+        lenLargestRow = -1
+        for row in self.rows:
+            lenRow = len(row)
+            if lenRow > lenLargestRow:
+                lenLargestRow = lenRow
+        
+        lenLargestRow = (lenLargestRow * 4) - 1
+
+        print("Len largest row " + str(lenLargestRow))
+        
+        screenLabel = "[SCREEN]"
+        lenScreen = len(screenLabel)
+        diff = lenLargestRow - lenScreen
+
+        layout = layout + (int(diff / 2) * ' ') + screenLabel
+        layout += '\n'
+
+        row_code = ASCII_CODE_FOR_A
+        for row in self.rows:
+            row_name = chr(row_code)
+            lenRow = len(row)
+            diff = lenLargestRow - ((lenRow * 4) - 1)
+            layout = layout + (int(diff / 2) * ' ')
+            for j in range(lenRow):
+                if (row[j].available):
+                    seat_name = row_name
+                    seat_number = j+1
+                    if seat_number < 10:
+                        seat_name += "0"
+                    seat_name += str(seat_number)
+                else:
+                    seat_name = "XXX"
+                layout += seat_name + " "
+            layout = layout.rstrip()
+            row_code += 1
+            layout += "\n"
+
+        return layout
